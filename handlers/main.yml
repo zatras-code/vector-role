@@ -1,0 +1,12 @@
+---
+# handlers file for vector-role
+- name: Reload systemd
+  ansible.builtin.systemd:
+    daemon_reload: true
+  when: not ansible_check_mode
+
+- name: Restart vector
+  ansible.builtin.systemd:
+    name: vector
+    state: restarted
+  when: not ansible_check_mode
