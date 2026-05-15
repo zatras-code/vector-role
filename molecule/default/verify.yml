@@ -1,0 +1,15 @@
+---
+- name: Verify
+  hosts: all
+  gather_facts: false
+
+  tasks:
+    - name: Check vector installed
+      ansible.builtin.command: vector --version
+      register: vector_version
+      changed_when: false
+
+    - name: Assert vector installed
+      ansible.builtin.assert:
+        that:
+          - vector_version.rc == 0
