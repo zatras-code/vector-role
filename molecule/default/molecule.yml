@@ -1,4 +1,3 @@
-
 ---
 dependency:
   name: galaxy
@@ -12,16 +11,21 @@ platforms:
     pre_build_image: true
     privileged: true
     command: /lib/systemd/systemd
+    cgroupns_mode: host
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:rw
 
-  - name: oraclelinux-8
-    image: geerlingguy/docker-oraclelinux8-ansible:latest
+  - name: rockylinux-8
+    image: geerlingguy/docker-rockylinux8-ansible:latest
     pre_build_image: true
     privileged: true
-    command: /usr/lib/systemd/systemd
+    command: /usr/sbin/init
+    cgroupns_mode: host
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:rw
 
 provisioner:
   name: ansible
 
 verifier:
   name: ansible
-

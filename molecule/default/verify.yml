@@ -4,12 +4,24 @@
   gather_facts: false
 
   tasks:
-    - name: Check vector installed
-      ansible.builtin.command: vector --version
-      register: vector_version
-      changed_when: false
+    - name: Check vector binary exists
+      stat:
+        path: /usr/local/bin/vector
+      register: vector_bin
 
-    - name: Assert vector installed
-      ansible.builtin.assert:
+    - name: Assert vector binary exists
+      assert:
         that:
-          - vector_version.rc == 0
+          - vector_bin.stat.exists
+
+    - name: Check vector service status
+      service_facts:
+
+    - name: Assert vector service running
+      assert:
+        that:
+          - ansible_facts.services['vector.service'].state == 'running'
+
+    - name: Validate vector config
+      command: /usr/local/bin/vector validate /etc/vector/vector.yaml
+      changed_when: false
